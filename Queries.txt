@@ -1,0 +1,1347 @@
+
+Please find below request for your concern.
+
+ 
+
+CALL CFDBA_ADMIN.CREATE_USER_PROC('isid','isid_users','Welcome@1234567',null,null,'ISID_USERS_LOW','isid;fullname, ISID account ', RETURNMSG,OUTMSG);
+
+CALL USER_ADMIN.CREATE_USER_PROC('zhengtan','NEWCO_ISID_USERS','Teradata@4321$',null,null,'NC_ISID_USERS_LOW','Account for Tangjuan Zheng, ISID Organon account', RETURNMSG,OUTMSG);
+
+ 
+
+grant logon on all to zhengtan with null password;  -- optional
+
+ 
+
+grant logon on all to isid with null password;
+
+ 
+
+Grant Select, Insert, Update, Delete, Create Table, Drop Table, Create  View, Drop View, create function, drop function, execute function, create procedure,
+
+drop procedure, execute procedure, STATISTICS on   DL_IDML_SLI_MRLANP_IMD    to   sterbovj;
+
+ 
+
+Access and Admin - A&A
+
+Backup and recovery - B&R
+
+Capacity Management-CM
+
+Decommission-DBDECOM/SCDECOM
+
+Deployment-DEPLOY
+
+General request-GENREQ
+
+Installation/Build-DBBLD/SCBLD/CLINST/APEX
+
+Refresh-FULLREF/SCHREF
+
+Performance Issues - P&T
+
+Patching/Upgrade - PATCH/UPGRD
+
+ 
+
+diagnostic verboseexplain on for session;
+
+diagnostic helpstats  on for session;
+
+ 
+
+COLLECT STATISTICS on COLUMN ;
+
+COLLECT STATISTICS on INDEX ();
+
+TDCPRD02_BCK_A_O_F_OFF_IDW_SL
+
+TDCPPT02_CPY_A_F_OFF_IDW_SL
+
+https://courses.teradata.com/learning/corporate/Certification/00002_administrator/
+
+ 
+
+SEL databasename
+
+, SUM(MAXPERM)/1024**3 AS Allocated
+
+, SUM(CURRENTPERM)/1024**3 AS Used
+
+, (MAX(CURRENTPERM)/1024**3)*(MAX(VPROC)+1) AS TotSkewedCP
+
+, Allocated - TotSkewedCP AS Eff_Avail_CP
+
+FROM dbc.diskspace
+
+WHERE databasename in ('CFDBA_AVALPERM','DATALAB_ADMIN','IDW_AVALPERM')               
+
+GROUP BY databasename;
+
+ 
+
+SELECT trim(DATABASENAME), (CAST(SUM(MAXPERM) AS DECIMAL(32,2))/1024/1024/1024) ALLOCATEDSPACE,
+
+(CAST(SUM(CURRENTPERM) AS DECIMAL(32,2))/1024/1024/1024) USEDSPACE, (CAST(SUM(PEAKPERM) AS DECIMAL(32,2))/1024/1024/1024) PEAKPERM,
+
+(ALLOCATEDSPACE-USEDSPACE) AVAILABLESPACE FROM DBC.DISKSPACE
+
+WHERE DATABASENAME LIKE '%DATALAB%'
+
+GROUP BY 1
+
+ORDER BY 5 DESC;
+
+ 
+
+SELECT
+
+DatabaseName,
+
+(CAST(SUM(MaxPerm) AS DECIMAL(32,2) ) / 1048576/1024) AS "MaxPerm in GB",                   
+
+(CAST(SUM(CurrentPerm) AS DECIMAL(32,2) ) / 1048576/1024) AS "CurrPerm in GB",                   
+
+(CAST( (SUM(MaxPerm)  - SUM(CurrentPerm)) AS DECIMAL(32,2) ) / 1048576/1024) AS "Free in GB",
+
+ZEROIFNULL( ( ( (SUM(MAXPERM)) - (SUM(CURRENTPERM))) * 100) / (NULLIFZERO(SUM(MAXPERM)))) "Free %"
+
+FROM
+
+DBC.DiskSpace
+
+WHERE
+
+DatabaseName IN ('MRL_PSL','MRL_SL','MRL_UTILS','MRL_WORK')
+
+GROUP BY 1
+
+order by databasename;
+
+ 
+
+sel databasename
+
+, tablename
+
+, sum(currentperm)/1024**3 as CP_in_GB
+
+, sum(currentperm)/1024**3 as CP_in_GB
+
+from    
+
+dbc.tablesize
+
+where
+
+databasename='IDML_IL_MANTISDW_QIM'
+
+and
+
+tablename in ('EVENT_SITE','event')
+
+group by 1, 2;
+
+ 
+
+dsc released_objects -n <job_name>
+
+logging online archive off for MMD_DMI_PDM06_BI;
+
+ 
+
+create database tmp_1785231 from IDW_AVALPERM as perm = 14e9;
+
+give tmp_1785231 to MMD_SL;
+
+drop database tmp_1785231;
+
+ 
+
+SELECT HASHMAP(HASHBUCKET(HASHROW(primaryindexvalue))), COUNT(*) FROM tablename GROUP BY 1;
+
+SELECT HASHMAP (HASHBUCKET(HASHROW(primaryindexvalue))), COUNT(*) FROM tablename GROUP BY 1 ;
+
+Select HASHAMP(HASHBUCKET(HASHROW(PRIMARY_INDEX_COLUMNS))) AS AMP_NO,COUNT(*) from DATABASENAME.TABLE_NAME GROUP BY 1;
+
+How can you determine I/O and CPU usage at a user level in Teradata?
+
+SELECT ACCOUNTNAME, USERNAME, SUM(CPUTIME) AS CPU, SUM(DISKIO) AS DISKIO FROM DBC.AMPUSAGE GROUP BY 1,2 ORDER BY 3 DESC;
+
+ 
+
+Lock Table DBNAME.TABLENAME write nowait Select * from DBNAME.TABLENAME;
+
+MODIFY PROFILE DBC_ADMIN_PROFILE AS PASSWORD = (EXPIRE=90,MINCHAR=14);
+
+CREATE PROFILE "CFDBA_PROFILE" AS
+
+SPOOL=3246995275776
+
+TEMPORARY=1073741824
+
+ACCOUNT=('$M_+CFDBA&S&D&H')
+
+DEFAULT DATABASE=NULL
+
+PASSWORD = (EXPIRE=90,MINCHAR=14,MAXCHAR=30,MAXLOGONATTEMPTS=3,LOCKEDUSEREXPIRE=15,REUSE=24,DIGITS='R',RESTRICTWORDS='N',SPECCHAR='R')
+
+ SELECT SYSLIB.AbortSessions (-1, '*', sessionid, 'Y', 'Y');
+
+An owner referenced by user does not have SELECT WITH GRANT OPTION access to IDW_SL.HANA_EKPO.
+
+ 
+
+grant select on IDW_SL to MMD_ILI_PDM with grant option;
+
+ 
+
+create user edw_readi_tenders_bi_qlik
+
+from EDW_TENDERS_USERS
+
+as perm = 0
+
+password = ****************
+
+spool = 0
+
+temporary = 0
+
+default database = edw_readi_tenders_bi_qlik
+
+profile = EDW_TENDERS_PROFILE
+
+default role = ALL
+
+collation = HOST
+
+time zone = '00:00'
+
+dateform = integerdate
+
+default character set unicode;
+
+ 
+
+select
+  cast(cast(logdate as format 'YYYY-MM-DD') as varchar(100))
+  ,cast(logtime as varchar(100))
+  ,username
+  ,cast(cast(logondate as format 'YYYY-MM-DD') as varchar(100))
+  ,cast(logontime as varchar(100))
+  ,ClientIpAddress             
+  ,ClientProgramName
+  ,ClientSystemUserId                    
+  ,event
+  from dbc.logonoff
+  where logdate >= date '2016-12-01'
+  and event not in ('Logon','Logoff')
+  order by 1 desc, 2 desc;
+
+ 
+
+  sel        a.username,a.passwordlastmoddate,b.expirepassword
+from      dbc.users a join dbc.profiles b
+                on a.profilename=b.profilename
+where   username like '%mrl%'
+order by a.username asc;
+
+ 
+
+ 
+
+LOCKING ROW FOR ACCESS
+
+SELECT 
+
+a.Starttime,A.DEFAULTDATABASE ,a.logonsource,a.clientid
+
+,a.SESSIONID,A.REQUESTNUM,A.USERNAME,a.AMPCPUTime
+
+,a.TotalIOCount ,CASE WHEN AMPCPUTime < 1 OR (AMPCPUTime /  (HASHAMP()+1)) =0 THEN 0 
+
+ELSE MaxAmpCPUTime/(AMPCPUTime /  (HASHAMP()+1))   END (DEC(8,2)) AS CPUSKW
+
+,CASE WHEN AMPCPUTime < 1 OR (TotalIOCount /  (HASHAMP()+1)) =0 THEN 0 
+
+ELSE MaxAmpIO/(TotalIOCount /  (HASHAMP()+1))   END (DEC(8,2)) AS IOSKW
+
+,a.SpoolUsage
+
+,((firstresptime-firststeptime) DAY(4) TO SECOND) AS QryRespTime
+
+,a.StatementType
+
+,a.ERRORCODE
+
+,a.ErrorText
+
+,SUBSTR(b.SqlTextInfo,1,12000)
+
+FROM
+
+dbc.DBQLOGTBL  A,
+
+dbc.DBQLSQLTBL B
+
+WHERE  a.procid = b.procid
+
+AND a.queryid = b.queryid
+
+AND a.clientid= 'kuvinot2'
+
+--AND  a.username = 'idw_admin'
+
+--AND a.StatementType = 'drop table'---AND A.ERRORCODE=2646 /*(spool error code)*/
+
+----AND b.sqltextinfo LIKE '%FE_VBRP_A_xi_V_PRA_T%'                   
+
+ORDER BY 1 desc;
+
+ 
+
+SELECT  CollectTimeStamp,
+
+SessionID,
+
+UserName,
+
+DefaultDatabase AS DatabaseName,
+
+StartTime,
+
+FirstRespTime,
+
+(FirstRespTime - StartTime) HOUR TO SECOND(6) AS FirstRespElapsedTime,
+
+(FirstRespTime - FirstStepTime) HOUR TO SECOND(6) AS ElapsedTime,
+
+TotalIOCount,
+
+AMPCPUTime+ParserCPUTime TotalCPUTime,
+
+SpoolUsage,
+
+--SpoolUsage/(1024*1024*1024) AS Spool_gb,
+
+100-(NULLIFZERO(AMPCPUTime/HASHAMP())/(MaxAMPCPUTime)*100) "Skew Factor",
+
+MaxAMPCPUTime * (HASHAMP()+1) AS impactCPU,
+
+( 100 - ( NULLIFZERO ( TotalIoCount / ( HASHAMP ( ) + 1  ) )  ) / NULLIFZERO ( MAXAMPIO ) * 100  ) AS IOSkewFactor,
+
+maxampio*(HASHAMP()+1) AS impactIO, impactIO * spoolusage/TotalIoCount AS IMPACT_SPOOL,
+
+NumResultRows,numsteps,
+
+delaytime,
+
+errorcode,
+
+ErrorText,
+
+QueryText
+
+FROM  dbc.dbqlogtbl
+
+WHERE username = 'MMD_TRF'
+
+and errortext like '%spool%'
+
+--AND sessionid = SESSION
+
+--AND numresultrows > 0
+
+--and querytext  like '%APCNNGBI_CALL.VVA_SNPSHT_CRM_MED_TGT_DR%MDCL%'
+
+--AND statementtype = 'select'
+
+--and querytext like '%MDCL%'
+
+ORDER BY starttime DESC;
+
+ 
+
+ 
+
+LOCKING ROW FOR ACCESS
+
+SELECT
+
+ A.LOGDATE
+
+, A.SESSIONID
+
+,A.PROCID
+
+,A.QUERYID
+
+,A.USERNAME
+
+,A.ACCTSTRINGHOUR AS LOGHOUR
+
+,A.STARTTIME
+
+,((A.FIRSTRESPTIME - A.STARTTIME)  DAY(4) TO SECOND(6)) AS ELAPSEDTIME
+
+,(AMPCPUTIME + PARSERCPUTIME)  AS TOTAL_CPU
+
+,(Maxampcputime*HASHAMP()+1) AS IMPACT_CPU
+
+,CASE WHEN TOTALIOCOUNT = 0 THEN 0 ELSE ((AMPCPUTIME+PARSERCPUTIME) * 1000)/TOTALIOCOUNT END   AS PRODUCT_JOIN_INDEX
+
+,CASE WHEN (AMPCPUTIME + PARSERCPUTIME) =0 THEN 0   ELSE (TOTALIOCOUNT) / ((AMPCPUTIME + PARSERCPUTIME) * 1000)  END   AS UNNECESSARY_IO
+
+,CASE WHEN  ((AMPCPUTIME+PARSERCPUTIME) / (HASHAMP()+1)) =0 THEN 0 ELSE ( 100 - (AMPCPUTIME / (HASHAMP()+1))/NULLIFZERO(MAXAMPCPUTIME)) END   AS CPU_SKEW
+
+,CASE WHEN (TOTALIOCOUNT / (HASHAMP()+1)) =0 THEN 0 ELSE (100-(TOTALIOCOUNT / (HASHAMP()+1))/NULLIFZERO(MAXAMPIO)) END   AS IO_SKEW
+
+,SPOOLUSAGE
+
+, Numresultrows
+
+,WDNAME
+
+, ERRORCODE
+
+, ERRORTEXT
+
+,B.SQLTEXTINFO AS QUERYTEXT
+
+FROM
+
+pdcrdata.dbqlogtbl_hst a , pdcrdata.dbqlsqltbl_hst b
+
+WHERE a.procid=b.procid
+
+AND a.queryid=b.queryid
+
+AND a.logdate=b.logdate
+
+--AND A.USERNAME='dbc'
+
+--AND A.STATEMENTTYPE='modify'
+
+AND b.SQLTEXTINFO LIKE '%esda_admin%'
+
+--and a.clientid='ahmekamm'
+
+AND A.LOGDATE BETWEEN '2019-06-19' AND '2020-01-07'
+
+ORDER BY A.LOGDATE DESC;
+
+ 
+
+LOCKING ROW FOR ACCESS
+
+SELECT
+
+ A.LOGDATE
+
+, A.SESSIONID
+
+,A.PROCID
+
+,A.QUERYID
+
+,A.USERNAME
+
+,A.ACCTSTRINGHOUR AS LOGHOUR
+
+,A.STARTTIME
+
+,((A.FIRSTRESPTIME - A.STARTTIME)  DAY(4) TO SECOND(6)) AS ELAPSEDTIME
+
+/*,(AMPCPUTIME + PARSERCPUTIME)  AS TOTAL_CPU
+
+,(Maxampcputime*HASHAMP()+1) AS IMPACT_CPU
+
+,CASE WHEN TOTALIOCOUNT = 0 THEN 0 ELSE ((AMPCPUTIME+PARSERCPUTIME) * 1000)/TOTALIOCOUNT END   AS PRODUCT_JOIN_INDEX
+
+,CASE WHEN (AMPCPUTIME + PARSERCPUTIME) =0 THEN 0   ELSE (TOTALIOCOUNT) / ((AMPCPUTIME + PARSERCPUTIME) * 1000)  END   AS UNNECESSARY_IO
+
+,CASE WHEN  ((AMPCPUTIME+PARSERCPUTIME) / (HASHAMP()+1)) =0 THEN 0 ELSE ( 100 - (AMPCPUTIME / (HASHAMP()+1))/NULLIFZERO(MAXAMPCPUTIME)) END   AS CPU_SKEW
+
+,CASE WHEN (TOTALIOCOUNT / (HASHAMP()+1)) =0 THEN 0 ELSE (100-(TOTALIOCOUNT / (HASHAMP()+1))/NULLIFZERO(MAXAMPIO)) END   AS IO_SKEW
+
+,SPOOLUSAGE*/
+
+, Numresultrows
+
+,WDNAME
+
+, ERRORCODE
+
+, ERRORTEXT
+
+,a.clientid
+
+,B.SQLTEXTINFO AS QUERYTEXT
+
+FROM
+
+pdcrdata.dbqlogtbl_hst a , pdcrdata.dbqlsqltbl_hst b
+
+WHERE a.procid=b.procid
+
+AND a.queryid=b.queryid
+
+AND a.logdate=b.logdate
+
+--AND A.USERNAME='dbc'
+
+--AND A.STATEMENTTYPE='modify'
+
+AND b.SQLTEXTINFO LIKE '%TDADMIN20191009190153%'
+
+--and a.clientid='ahmekamm'
+
+AND A.LOGDATE BETWEEN '2019-10-08' AND '2019-10-10'
+
+ORDER BY A.LOGDATE DESC;
+
+ 
+
+select * from dbc.dbqlogtbl
+
+where collecttimestamp between '2020-04-08 01:00:00.00' and '2020-04-08 05:00:00.00';
+
+ 
+
+ 
+
+nohup arcmain outlog=arc_bck_PRD_MMDSLIPDM_20200421.log < arc_bck_PRD_MMDSLIPDM_20200421.txt &
+
+nohup arcmain USE4BVLI outlog=arc_res_DEV_MMDSLIPDM_20200421.log < arc_res_DEV_MMDSLIPDM_20200421.txt &
+
+ 
+
+ 
+
+                show view MMD_ILI_PDM.V_SAP_EKPO;
+
+show view IDW_SL.HANA_EKPO;
+
+ 
+
+grant select on IDW_SL to MMD_ILI_PDM with grant option;
+
+ 
+
+An owner referenced by user does not have SELECT WITH GRANT OPTION access to IDW_SL.HANA_EKPO.
+
+ 
+
+show view MMD_ILI_PDM.V_SAP_EKPO;
+
+show view IDW_SL.HANA_EKPO;
+
+ 
+
+An owner referenced by user does not have SELECT WITH GRANT OPTION access to IDW_SL.HANA_EKPO.
+
+ 
+
+grant select on IDW_SL to MMD_ILI_PDM with grant option;
+
+ 
+
+grant  select on ERPANLTC to INDTAX_RPT with grant option;
+
+ 
+
+SELECT Failed. 3523: (-3523)An owner referenced by user does not have SELECT WITH GRANT OPTION access to ERPANLTC.SAP_BW_ZGFBM_CC_SPLIT.
+
+sel a.username,b.profilename,expirepassword,b.commentstring from dbc.users a join dbc.profiles b
+
+on a.profilename=b.profilename
+
+where b.expirepassword in (0,' ');
+
+ 
+
+1> Left over HUT locks can be validated by Showlocks in viewpoint. Customer DBA need to release these locks because BAR team does not have access to release the locks.
+
+2>Online locks - We need to also check left over online locks after aborting the backup by below query.
+
+select DatabaseName, count(*)
+
+from DBC.ArchiveLoggingObjsV
+
+group by 1
+
+order by 1 ;
+
+If any database has leftover locks, it has to be released manually by below command
+
+logging online archive off for (databasename), override;
+
+you can release the same through any super user or else contact BAR team to release these online locks.
+
+====================================
+
+ 
+
+.LOGON TDCPRD02/BARUSER1,"baruser1";
+
+ 
+
+.SET QUERY_BAND = 'UtilityDataSize=Large;';
+
+ 
+
+archive data tables
+
+(IDML_IL_MANTISDW_QIM.EVENT),
+
+(IDML_IL_MANTISDW_QIM.CD_R),
+
+(IDML_IL_MANTISDW_QIM.CD_OPER_KEY),
+
+ 
+
+release lock,
+
+file = ARCPIPE1;
+
+.logoff;
+
+ 
+
+---------------------------------
+
+ 
+
+.LOGON tdctst02.merck.com/BARUSER1,"Teradata123";
+
+ 
+
+.SET QUERY_BAND = 'UtilityDataSize=Large;';
+
+ 
+
+copy data tables
+
+(IDML_IL_MANTISDW_QIM_TST.EVENT) (from (IDML_IL_MANTISDW_QIM.EVENT)),
+
+(IDML_IL_MANTISDW_QIM_TST.CD_R)  (from (IDML_IL_MANTISDW_QIM.CD_R)),
+
+(IDML_IL_MANTISDW_QIM_TST.CD_OPER_KEY) (from (IDML_IL_MANTISDW_QIM.CD_OPER_KEY)),
+
+(IDML_IL_MANTISDW_QIM_TST.CD_GRP)            (from (IDML_IL_MANTISDW_QIM.CD_GRP)),
+
+(IDML_IL_MANTISDW_QIM_TST.CD_GRP_OPER_KEY)     (from (IDML_IL_MANTISDW_QIM.CD_GRP_OPER_KEY)),
+
+ 
+
+release lock,
+
+file = ARCPIPE1;
+
+.logoff;
+
+ 
+
+-------------------------------
+
+ 
+
+nohup arcmain outlog=bck_PRD_MANTISDW_QIM_20200511.log < arc_bck_PRD_MANTISDW_QIM_20200511.txt &
+
+nohup arcmain USE4BVLI outlog=res_TST_MANTISDW_QIM_TST_20200511.log < arc_res_TST_MANTISDW_QIM_TST_20200511.txt &
+
+ 
+
+ 
+
+release lock IDW_OUT where jobid = 300061;
+
+# dsc purge_jobs -n jobname
+
+# /etc/init.d/clienthandler restart
+
+ 
+
+DSA automatically releases HUT lock when DSA job completes/fails/gets aborted (except case of database restart).
+
+And usually you don't need to release HUT lock manually.
+
+You need to release HUT lock manually only if HUT lock is left for any reason.
+
+ 
+
+​HUT lock which is placed by arcmain does not have jobid so it can be released without specifying jobid.
+
+ 
+
+ 
+
+HUT lock is NOT released while the object is being archived/restored even when jobid is specified correctly
+
+=================================================
+
+ 
+
+How to find number of records present in Each AMP or a Node for a given Table through SQL
+
+Select HASHAMP(HASHBUCKET(HASHROW(PRIMARY_INDEX_COLUMNS))) AS AMP_NO,COUNT(*)
+
+from DATABASENAME.TABLE_NAME GROUP BY
+
+ 
+
+ 
+
+sel *
+
+from dbc.dbqlogtbl  a,dbc.dbqlsqltbl b
+
+where a.queryid=306998827267329206
+
+and a.queryid = b.queryid
+
+ and a.procid=b.procid
+
+ and cast(a.collecttimestamp as date) = cast(b.collecttimestamp as date);
+
+sel * from dbc.dbqlogtbl
+
+where username='GMAXETL' and errortext like '%spool%';
+
+diagnostic verboseexplain on for session;
+
+diagnostic helpstats on for session;
+
+ 
+
+sel *
+
+from dbc.dbqlogtbl  a,dbc.dbqlsqltbl b
+
+where a.sessionid=27755677
+
+and a.queryid = b.queryid
+
+ and a.procid=b.procid
+
+ and cast(a.collecttimestamp as date) = cast(b.collecttimestamp as date);
+
+SELECT  CollectTimeStamp,
+
+SessionID,
+
+UserName,
+
+DefaultDatabase AS DatabaseName,
+
+StartTime,
+
+FirstRespTime,
+
+(FirstRespTime - StartTime) HOUR TO SECOND(6) AS FirstRespElapsedTime,
+
+(FirstRespTime - FirstStepTime) HOUR TO SECOND(6) AS ElapsedTime,
+
+TotalIOCount,
+
+AMPCPUTime+ParserCPUTime TotalCPUTime,
+
+SpoolUsage,
+
+100-(NULLIFZERO(AMPCPUTime/HASHAMP())/(MaxAMPCPUTime)*100) "Skew Factor",
+
+MaxAMPCPUTime * (HASHAMP()+1) AS impactCPU,
+
+NumResultRows,numsteps,
+
+delaytime,
+
+errorcode,
+
+ErrorText,
+
+COALESCE(SUBSTRING(queryband, (INDEX(queryband, 'DocName=')+8), ((INDEX(queryband,'DPName')-7) -(INDEX(queryband, 'DocName=')+2)) ),'UNKNOWN') AS ReportName,
+
+QueryText
+
+FROM  dbc.dbqlogtbl
+
+WHERE username='GMAXETL'
+
+and errortext like any('%SPOOL%','%TDWM%')
+
+ORDER BY starttime DESC;
+
+sel *
+
+from dbc.dbqlogtbl  a,dbc.dbqlsqltbl b
+
+where a.totaliocount=812759
+
+and a.queryid = b.queryid
+
+ and a.procid=b.procid
+
+ and cast(a.collecttimestamp as date) = cast(b.collecttimestamp as date);
+
+SELECT  CollectTimeStamp,
+
+SessionID,
+
+UserName,
+
+DefaultDatabase AS DatabaseName,
+
+StartTime,
+
+FirstRespTime,
+
+(FirstRespTime - StartTime) HOUR TO SECOND(6) AS FirstRespElapsedTime,
+
+(FirstRespTime - FirstStepTime) HOUR TO SECOND(6) AS ElapsedTime,
+
+TotalIOCount,
+
+AMPCPUTime+ParserCPUTime TotalCPUTime,
+
+SpoolUsage,
+
+100-(NULLIFZERO(AMPCPUTime/HASHAMP())/(MaxAMPCPUTime)*100) "Skew Factor",
+
+MaxAMPCPUTime * (HASHAMP()+1) AS impactCPU,
+
+NumResultRows,numsteps,
+
+delaytime,
+
+errorcode,
+
+ErrorText,
+
+COALESCE(SUBSTRING(queryband, (INDEX(queryband, 'DocName=')+8), ((INDEX(queryband,'DPName')-7) -(INDEX(queryband, 'DocName=')+2)) ),'UNKNOWN') AS ReportName,
+
+QueryText
+
+FROM  dbc.dbqlogtbl
+
+WHERE username='GMAXETL'
+
+and errortext like any('%SPOOL%','%TDWM%')
+
+ORDER BY starttime DESC;
+
+ 
+
+ 
+
+SELECT
+
+  LogDate,
+
+    UserName,
+
+    TxnMode,
+
+    ErrorCode,
+
+    COUNT(1) AS Row_Cnt
+
+    FROM PDCRDATA.DBQLogTbl_Hst
+
+    WHERE UserName = 'mmd_trfi_tsis'
+
+        AND  LogDate >= DATE '2020-01-01'
+
+        AND  QueryText LIKE '%call %'
+
+        AND  ErrorCode = 5510
+
+    GROUP BY 1,
+
+        2,
+
+        3,
+
+        4
+
+    ORDER BY LogDate DESC,
+
+        TxnMode;
+
+ 
+
+ 
+
+1) Use empty file and connect with target table and then run it so the error will disappear. Then run with the right source file.
+
+2) Use code to release the lock, syntax is:
+
+       RELEASE MLOAD Table1 ;
+
+       OR
+
+       RELEASE MLOAD Table1 IN APPLY
+
+    
+
+3) Drop and recreate the table.
+
+ 
+
+I have tried  number 1 and 2 solution but did not work successfully.  DBA kill my SQL session but still it's same, did not fix the problem.
+
+ 
+
+However, solution 3 works for me. Then I was able to run the job and load the data into the table.
+
+ 
+
+sel logdate,username,logonsource,clientid,errortext,querytext from pdcrinfo.dbqlogtbl_hst
+
+where username in ('edw_exp','edw_read','edw_write') and logdate between date-60 and date;
+
+ 
+
+sel 'REVOKE '||TRIM(ROLENAME)||' FROM '||TRIM(GRANTEE)||';' from dbc.rolemembers
+
+where rolename like '%PDM%'
+
+and grantee not in ('IDW_ADMIN','BARADMIN','BARUSER1','BARUSER2','DBC','CFDBA_ADMIN','CFDBA_ROLE');
+
+ 
+
+select distinct 'REVOKE '||
+
+CASE
+
+WHEN A.accessright = 'CA' THEN 'Create Authorization'
+
+WHEN A.accessright = 'CD' THEN 'Create Database'
+
+WHEN A.accessright = 'CF' THEN 'Create Function'
+
+WHEN A.accessright = 'CF' THEN 'Create Owner Procedure'
+
+WHEN A.accessright = 'CG' THEN  'Create Trigger'
+
+WHEN A.accessright = 'CM' THEN 'Create Macro'
+
+WHEN A.accessright = 'CP' THEN 'Checkpoint'
+
+WHEN A.accessright = 'CT' THEN  'Create Table'
+
+WHEN A.accessright = 'CV' THEN 'Create View'
+
+WHEN A.accessright = 'D' THEN 'Delete'
+
+WHEN A.accessright = 'DA' THEN 'Drop Authorization'
+
+WHEN A.accessright = 'DD' THEN 'Drop Database'
+
+WHEN A.accessright = 'DF' THEN 'Drop Function'
+
+WHEN A.accessright = 'DG' THEN 'Drop Trigger'
+
+WHEN A.accessright = 'DM' THEN 'Drop Macro'
+
+WHEN A.accessright = 'DP' THEN 'Dump'
+
+WHEN A.accessright = 'DT' THEN 'Drop Table'
+
+WHEN A.accessright = 'DV' THEN 'Drop View'
+
+WHEN A.accessright = 'E' THEN 'Execute'
+
+WHEN A.accessright = 'EF' THEN 'Execute Function'
+
+WHEN A.accessright = 'I' THEN 'Insert'
+
+WHEN A.accessright = 'PC' THEN 'Create Procedure'
+
+WHEN A.accessright = 'PD' THEN 'Drop Procedure'
+
+WHEN A.accessright = 'PE' THEN 'Execute Procedure'
+
+WHEN A.accessright = 'R' THEN 'Select'
+
+--WHEN A.accessright = 'RF' THEN 'References'
+
+WHEN A.accessright = 'RS' THEN 'Restore'
+
+WHEN A.accessright = 'SH' THEN 'Show'
+
+WHEN A.accessright = 'ST' THEN 'Statistics'
+
+WHEN A.accessright = 'U' THEN 'Update'
+
+--WHEN A.accessright = 'IX' THEN 'Indexes'
+
+    ELSE A.accessright
+
+  END
+
+ 
+
+||' on ' ||  databasename || ' FROM ' || username ||';'
+
+from dbc.allrights A
+
+where databasename like '%PDM%' and username not in ('IDW_ADMIN','BARADMIN','BARUSER1','BARUSER2','DBC') and username<>databasename;
+
+ 
+
+sel logdate,collecttimestamp,sessionid,username,logonsource,errortext,querytext from pdcrinfo.dbqlogtbl_hst
+
+where
+
+--querytext like '%EEM_AUDIT_DATA%' and
+
+logdate between date-7 and date
+
+--logdate='2021-02-22'
+
+and username='APCNNGBI_MEDEDETL';
+
+ 
+
+SELECT  Collecttimestamp,
+
+SessionID,
+
+UserName,
+
+DefaultDatabase as DatabaseName,
+
+StartTime,
+
+FirstRespTime,
+
+(FirstRespTime - StartTime) hour to second(6) as FirstRespElapsedTime,
+
+TotalIOCount,
+
+AMPCPUTime+ParserCPUTime TotalCPUTime,
+
+SpoolUsage/(1024*1024*1024) as Spool_GB,
+
+100-(nullifzero(AMPCPUTime/HASHAMP())/(MaxAMPCPUTime)*100) "Skew Factor",
+
+MaxAMPCPUTime * (HASHAMP()+1) AS impactCPU,
+
+NumResultRows,
+
+delaytime,
+
+errorcode,
+
+ErrorText,
+
+QueryText
+
+FROM  dbc.dbqlogtbl
+
+where username='NCAPCNNGBI_DMETL'
+
+and ampcputime > 1
+
+and numsteps > 0
+
+--AND logdate between date-20 and date
+
+--and FirstRespElapsedTime > 30
+
+order by CollectTimeStamp desc;
+
+ 
+
+ 
+
+I have done my MTech in the specialization of Computer Science from JNT University, AP in 2012. After that I had an opportunity to work for Atos from Jan14 to Dec14 where I have started off my career as an Oracle DBA I have been with Atos for  1 year and worked for Vodafone client which is largest telecom warehouse in south Asia then I shifted to Fujitsu in March 2015 where I have worked more than 2 years I worked for BCBSNC client  which is insurance domain  after that I got opportunity to work with Brillio for Walmart client which is largest retail client in US after that I am associated with HCL for Merck client its an pharmacy domain client. 
+
+Total I am have 6 Years of experience as a both production and application DBA. 
+
+My day to day activities will be like 
+
+User Management like: Creating users, Creating profiles, Creating Roles, Assigning roles and profiles to users.  
+
+Space Management like: Monitoring system space, Checking whether any database have reached the threshold value, Checking the highly skewed tables. 
+
+Monitoring the system health through  Viewpoint portlets. 
+
+Taking care of business and users query issues. 
+
+Taking care of Loading jobs and assisting the loading team if there is any fail or long running. 
+
+About backup: I have good exposure to Natvaultand  TARA GUI and Symantec Netbackup tools DSA. 
+
+We used to prepare the backup scripts every month and run the jobs through the TARA tool. 
+
+We used restore the tables on business demand. 
+
+I worked as change coordinator,  
+
+Taking care of change tickets. Follow up on Tays ticket  
+
+Implementing the change tickets  
+
+ 
+
+You can re-write correlated or minus queries with left outer join. Correlated query has to be executed for every row returned by the outer query. Correlated queries are expensive for the optimizer. 
+
+Example:  Get all departments that have no employees. 
+
+Select A.Deptno ,A.Dname , A.Location From Dept A Where Not Exists (Select ‘1’ ;            From Emp B Where B.DeptNo = A.Deptno ) 
+
+Above query can be re-written like below and gives better performance than above. 
+
+Select A.Deptno ,A.Dname , A.Location From Dept A Left Outer Join Emp B On (A.DeptNo =B.Deptno ) Where B.Deptno Is Null 
+
+Unmatched Data Types: The basic remedy for an unmatched data type on a join condition is to materialize correctly matching data types before they participate in a join condition.  
+
+Product Joins: optimizer underestimating the number of rows which will participate. Verify the row counts and compare the estimates with the actual row counts.  Missing join conditions · OR-ed join conditions · Unequal join conditions · Missing, obsolete, or inappropriate statistics. 
+
+solution for an OR-ed join condition is to split the conditions on two or more SELECT statements and combine the results with a UNION operator 
+
+Large redistributions: Separate the skewed portion of the join from the non-skewed portion in separate select statements using a UNION operator to reassemble the consolidated result set. 
+
+Sel e.eno, e.name, e.sal, d.dno from employee e inner join department d on e.do=d.do where e.sal>1000 and e.dno not in (‘2000’,’3000’) Union
+
+Sel e.eno, e.name, e.sal, d.dno from employee e inner join department d on e.do=d.do where e.sal>1000 and e.dno in (‘2000’,’3000’);
+
+ 
+
+Perflook -- MERCKPROD3-1-4:/opt/teradata/gsctools/bin # perflook
+
+ 
+
+Tpareset -f <any description>     --Stop the Teradata server
+
+Pdestate -a    -- To check the status
+
+Bynet , Amp, Vprocs will shows stopped
+
+/etc/init.d/tpa start    - To start the Teradata server
+
+Pdestate -a    -- To check the status
+
+ 
+
+PDE state is RUN/STARTED.
+
+DBS state is 5: Logons are enabled - The system is quiescent
+
+ 
+
+ 
+
+Backup script:
+
+#!/bin/sh
+
+ 
+
+TIER=$1
+
+BACKUP_HOST=$2
+
+ 
+
+DATE=`date +%Y%m%d%H%M%S`
+
+WORKDIR=/var/opt/teradata/scripts
+
+OUTPUT=${WORKDIR}/log/${TIER}_bck_DEV_SEC_ESA_${DATE}.log
+
+ 
+
+arcmain USE4BVLI <<EOF>> ${OUTPUT} 2>&1
+
+ 
+
+.LOGON TDCDEV02.MERCK.COM/BARUSER2,"Teradatadev123";
+
+ 
+
+.SET QUERY_BAND = 'UtilityDataSize=Small;';
+
+ 
+
+copy data tables
+
+(SEC_ESA.Employee),
+
+(SEC_ESA.Employee_H),
+
+(SEC_ESA.Organization_Unit),
+
+(SEC_ESA.Organization_Unit_H),
+
+(SEC_ESA.Site_Info),
+
+release lock,
+
+file = ARCPIPE1
+
+;
+
+.LOGOFF;
+
+quit;
+
+EOF
+
+echo "RES_DEV_SEC_ESA" | mailx -v -s "RES_DEV_SEC_ESA" -S smtp="mailhost.merck.com:25" "DatabaseServicesTeradata@NorthAmerica.msx.merck.com" < $OUTPUT
+
+ 
+
+ 
+
+Not logged in last 90 days:
+
+select c.username(title 'Username')
+
+    from dbc.users c  left outer join dbc.logonoff l
+
+    on lower(c.username)=lower(l.username)
+
+    where c.ownername='ISID_USERS'
+
+group by 1
+
+having max(l.logondate) is null
+
+order by 1;
+
+ 
+
+Linux Crontab Format :
+
+MIN HOUR DOM MON DOW CMD
+
+Field    Description    Allowed Value
+MIN      Minute field    0 to 59
+HOUR     Hour field      0 to 23
+DOM      Day of Month    1-31
+MON      Month field     1-12
+DOW      Day Of Week     0-6
+CMD      Command         Any command to be executed.
+ 
+
+30 08 10 06 * /home/maverick/full-backup
+0 – 30th Minute
+08 – 08 AM
+10 – 10th Day
+06 – 6th Month (June)
+* – Every day of the week
+
+ 
+
+ 
+
+.LOGON tdcdev02.merck.com/BARUSER1,"Terabar1$dev321";
+
+.SET QUERY_BAND = 'UtilityDataSize=Large;';
+
+ 
+
+copy data tables
+
+(MYLRN_ETL) (from (MYLRN_ETL)),
+
+release lock,
+
+file = ARCPIPE1
+
+;
+
+.logoff;
+
+ 
+
+.LOGON TDCPRD02/BARUSER1,"TeraDsaArcProdB1@321";
+
+ 
+
+.SET QUERY_BAND = 'UtilityDataSize=Large;';
+
+ 
+
+archive data tables
+
+ 
+
+(MYLRN_ETL),
+
+release lock,
+
+file = ARCPIPE1
+
+;
+
+.logoff;
+
+ 
+
+ 
+
+nohup arcmain outlog=arc_bck_PRD_MYLRN_20210325.txt.log < arc_bck_PRD_MYLRN_20210325.txt &
+
+nohup arcmain USE4BVLI outlog=res_DEV_MYLRN_20210325.log < arc_res_DEV_MYLRN_20210325.txt &
+
+ 
+
+ 
+
+tail -f bck_PPT_EDW_SL_20200911.log
+
+ 
+
+ 
+
+show procedure CFDBA_ADMIN.CREATE_USER_PROC;
+
+ 
+
+REPLACE PROCEDURE CFDBA_ADMIN.CREATE_USER_PROC
+
+(
+
+   IN  INUSERID     VARCHAR(40)
+
+  ,IN  INPARENTID   VARCHAR(40)
+
+  ,IN  INPWORD      VARCHAR(40)
+
+  ,IN  INPERMSPACE  FLOAT
+
+  ,IN  INACCOUNT    VARCHAR(40)
+
+  ,IN  INPROFILE    VARCHAR(150)
+
+  ,IN  INCOMMENTS VARCHAR(150)
+
+  ,OUT ORETURNCODE  INTEGER
+
+  ,OUT ORESULT      VARCHAR(4000)
+
+)
+
+ 
+
+SQL SECURITY INVOKER
+
+ 
+
+MAIN : BEGIN
+
+ 
+
+  DECLARE   STATUS     CHAR(5)       DEFAULT '00000';
+
+ 
+
+  DECLARE  VUSERID     VARCHAR(40)   DEFAULT ' ';
+
+  DECLARE  VPARENTID   VARCHAR(40)   DEFAULT ' ';
